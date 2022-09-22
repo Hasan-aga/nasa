@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "PORT=8000 node src/server.js",
-    "watch": "PORT=8000 nodemon src/server.js"
+    "start": "PORT=7000 node src/server.js",
+    "watch": "PORT=7000 nodemon src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +14,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "csv-parse": "^5.3.0",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

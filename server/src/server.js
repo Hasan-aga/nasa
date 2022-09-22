@@ -2,7 +2,7 @@ const http = require("http");
 const { app } = require("./app");
 const { planetPromise } = require("./model/planet.model");
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT;
 
 const server = http.createServer(app);
 
