@@ -36,15 +36,13 @@ async function httpSubmitLaunch(launch) {
 
 async function httpAbortLaunch(id) {
   // Delete launch with given ID.
-  console.log(id);
   const requestOptions = {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ flightNumber: id }),
   };
 
   try {
-    const response = await fetch(`${API_URL}/launches`, requestOptions);
+    const response = await fetch(`${API_URL}/launches/${id}`, requestOptions);
     const data = await response.json();
     if (!response.ok) {
       throw data.error;

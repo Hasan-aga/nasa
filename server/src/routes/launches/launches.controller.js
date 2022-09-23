@@ -36,11 +36,11 @@ function httpAddLaunch(req, res) {
 }
 
 function httpRemoveLaunch(req, res) {
-  const launch = req.body;
-  removeLaunch(launch)
-    ? res.status(200).json({ removed: launch })
+  const removeID = req.params.id;
+  removeLaunch(removeID)
+    ? res.status(200).json({ removed: removeID })
     : res
-        .status(500)
+        .status(404)
         .json({ error: "failed to remove! object does not exist" });
   return;
 }
