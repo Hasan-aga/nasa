@@ -22,9 +22,13 @@ async function httpSubmitLaunch(launch) {
     body: JSON.stringify(launch),
   };
   try {
-    await fetch(`${API_URL}/launches`, requestOptions);
+    const response = await fetch(`${API_URL}/launches`, requestOptions);
+    const data = await response.json();
+    if (!response.ok) {
+      throw data.error;
+    }
   } catch (error) {
-    console.error(error);
+    console.error("ERROR!!! ", JSON.stringify(error));
   }
 }
 
