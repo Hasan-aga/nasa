@@ -31,7 +31,12 @@ function addLaunch(launch) {
   );
 }
 
+function removeLaunch(launch) {
+  return launches.delete(launch.flightNumber);
+}
+
 module.exports = {
   getAllLaunches,
   addLaunch,
+  removeLaunch,
 };
