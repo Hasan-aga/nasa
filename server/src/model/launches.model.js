@@ -31,12 +31,16 @@ function addLaunch(launch) {
   );
 }
 
-function removeLaunch(id) {
-  return launches.delete(Number(id));
+function abortLaunch(id) {
+  const abortedLaunch = launches.get(id);
+  if (!abortedLaunch) return false;
+  abortedLaunch.upcoming = false;
+  abortedLaunch.success = false;
+  return abortedLaunch;
 }
 
 module.exports = {
   getAllLaunches,
   addLaunch,
-  removeLaunch,
+  abortLaunch,
 };

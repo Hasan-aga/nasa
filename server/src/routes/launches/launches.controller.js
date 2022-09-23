@@ -1,7 +1,7 @@
 const {
   getAllLaunches,
   addLaunch,
-  removeLaunch,
+  abortLaunch,
 } = require("../../model/launches.model");
 
 function httpGetAllLaunches(req, res) {
@@ -36,8 +36,8 @@ function httpAddLaunch(req, res) {
 }
 
 function httpRemoveLaunch(req, res) {
-  const removeID = req.params.id;
-  removeLaunch(removeID)
+  const removeID = Number(req.params.id);
+  abortLaunch(removeID)
     ? res.status(200).json({ removed: removeID })
     : res
         .status(404)
