@@ -6,7 +6,7 @@ const launch = {
   mission: "kepler is dumb",
   rocket: "solid fuel",
   launchDate: new Date("11 11 2024"),
-  destination: "keplaroid",
+  target: "keplaroid",
   customer: ["me", "myself"],
   upcoming: true,
   success: true,

@@ -16,6 +16,7 @@ async function httpGetLaunches() {
 
 async function httpSubmitLaunch(launch) {
   // Submit given launch data to launch system.
+  console.log(launch);
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -27,8 +28,10 @@ async function httpSubmitLaunch(launch) {
     if (!response.ok) {
       throw data.error;
     }
+    return response;
   } catch (error) {
     console.error("ERROR!!! ", JSON.stringify(error));
+    return { ok: false };
   }
 }
 
