@@ -11,7 +11,6 @@ const maybeHabitable = function (planet) {
   );
 };
 const habitablePlanets = [];
-console.log(__dirname);
 const planetPromise = new Promise(function (resolve, reject) {
   createReadStream(path.join(__dirname, "..", "data", "kepler_data.csv"))
     .pipe(
