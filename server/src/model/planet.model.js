@@ -25,12 +25,6 @@ const planetPromise = new Promise(function (resolve, reject) {
     })
     .on("end", () => {
       resolve(habitablePlanets);
-      console.log(`${habitablePlanets.length} habitable planets found.`);
-      console.log(
-        habitablePlanets.map(
-          (planet, index) => index + " " + planet["kepler_name"]
-        )
-      );
     })
     .on("error", (error) => {
       reject(`we have a problem, ${error}`);

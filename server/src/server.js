@@ -7,8 +7,12 @@ const PORT = process.env.PORT;
 const server = http.createServer(app);
 
 async function startServerAfterLoadingData() {
-  await planetPromise;
-  server.listen(PORT, () => console.log("Listening on port ", PORT));
+  try {
+    await planetPromise;
+    server.listen(PORT, () => console.log("Listening on port ", PORT));
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 startServerAfterLoadingData();
