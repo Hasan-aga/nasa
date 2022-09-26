@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "deploy-cluster": "npm run build --prefix client && npm run cluster --prefix server",
     "deploy": "npm run build --prefix client && npm run start --prefix server",
     "install-server": "npm install --prefix server",
     "install-client": "npm install --prefix client",
