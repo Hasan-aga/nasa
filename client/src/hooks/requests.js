@@ -2,16 +2,27 @@ const API_URL = "http://localhost:8000";
 
 async function httpGetPlanets() {
   // Load planets and return as JSON.
-  const response = await fetch(`${API_URL}/planets`);
-  const planets = await response.json();
-  return planets;
+  try {
+    const response = await fetch(`${API_URL}/planets`);
+    if (!response.ok) {
+      throw new Error(`failed to get planets, ${response.status}`);
+    }
+    const planets = await response.json();
+    return planets;
+  } catch (error) {}
 }
 
 async function httpGetLaunches() {
   // Load launches, sort by flight number, and return as JSON.
-  const response = await fetch(`${API_URL}/launches`);
-  const launches = await response.json();
-  return launches.sort((a, b) => a.flightNumber - b.flightNumber);
+  try {
+    const response = await fetch(`${API_URL}/launches`);
+    if (!response.ok)
+      throw new Error(`failed to retrieve launches: ${response.status}`);
+    const launches = await response.json();
+    return launches.sort((a, b) => a.flightNumber - b.flightNumber);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function httpSubmitLaunch(launch) {
