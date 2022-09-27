@@ -7,8 +7,8 @@
     "cluster": "pm2 start src/server.js -i max",
     "test": "jest --detectOpenHandles",
     "test-watch": "jest --watch",
-    "start": "PORT=7000 node src/server.js",
-    "watch": "PORT=7000 nodemon src/server.js"
+    "start": "PORT=8000 node src/server.js",
+    "watch": "PORT=8000 nodemon src/server.js"
   },
   "keywords": [],
   "author": "",
