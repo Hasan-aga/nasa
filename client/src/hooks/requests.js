@@ -19,6 +19,7 @@ async function httpGetLaunches() {
     if (!response.ok)
       throw new Error(`failed to retrieve launches: ${response.status}`);
     const launches = await response.json();
+    console.log(launches);
     return launches.sort((a, b) => a.flightNumber - b.flightNumber);
   } catch (error) {
     console.error(error);

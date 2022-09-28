@@ -51,7 +51,7 @@ const loadPlanetsData = function () {
 
 async function getAllPlanets() {
   try {
-    return await planets.find({});
+    return await planets.find({}, { __v: 0, _id: 0 });
   } catch (error) {
     console.error(`couldn't get planets, ${error}`);
   }

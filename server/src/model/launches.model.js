@@ -1,46 +1,84 @@
-const launches = new Map();
-let lastFlightNumber = 100;
+const launches = require("./launches.mongo");
+const planets = require("./planet.mongo");
 
-const launch = {
-  flightNumber: 100,
-  mission: "kepler is dumb",
-  rocket: "solid fuel",
-  launchDate: new Date("11 11 2024"),
-  target: "keplaroid",
-  customer: ["me", "myself"],
-  upcoming: true,
-  success: true,
-};
-
-launches.set(launch.flightNumber, launch);
-
-function getAllLaunches() {
-  return Array.from(launches.values());
+async function getLatestFlightNumber() {
+  const latestLaunch = await launches.findOne().sort("-flightNumber");
+  if (!latestLaunch) {
+    return process.env.DEFAULT_FLIGHT_NUMBER;
+  }
+  return latestLaunch.flightNumber;
 }
 
-function addLaunch(launch) {
-  lastFlightNumber++;
-  launches.set(
-    lastFlightNumber,
-    Object.assign(launch, {
-      flightNumber: lastFlightNumber,
-      customer: ["Hasan Aga", "NASA"],
-      upcoming: true,
-      success: true,
-    })
+async function getAllLaunches() {
+  try {
+    const results = await launches.find({});
+    return results;
+  } catch (error) {
+    console.error(`couldn't get launches from database, ${error}`);
+    throw new Error(`couldn't get launches from database, ${error}`);
+  }
+}
+
+async function getLaunchById(id) {
+  try {
+    return await launches.findOne({ flightNumber: id });
+  } catch (error) {
+    console.error(`couldn't find a launch with id:${id}, ${error}`);
+  }
+}
+
+async function saveLaunch(launch) {
+  const validPlanet = await planets.findOne({ kepler_name: launch.target });
+  if (!validPlanet) {
+    throw new Error(
+      `cannot add launch with invalid planet! "${launch.target}" is invalid`
+    );
+  }
+  await launches.findOneAndUpdate(
+    { flightNumber: launch.flightNumber },
+    launch,
+    {
+      upsert: true,
+    }
   );
+  return launch;
 }
 
-function abortLaunch(id) {
-  const abortedLaunch = launches.get(id);
-  if (!abortedLaunch) return false;
-  abortedLaunch.upcoming = false;
-  abortedLaunch.success = false;
-  return abortedLaunch;
+async function scheduleLaunch(launch) {
+  const flightNumber = (await getLatestFlightNumber()) + 1;
+  launch.flightNumber = flightNumber;
+  launch.customer = ["Hasan Aga", "NASA"];
+  launch.upcoming = true;
+  launch.success = true;
+  try {
+    return await saveLaunch(launch);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async function abortLaunch(id) {
+  try {
+    const existsLaunch = await getLaunchById(id);
+    if (!existsLaunch) {
+      throw new Error(`No launch with id:${id} exists!`);
+    }
+    if (!existsLaunch.upcoming) {
+      throw new Error(`Launch with id:${id} already aborted!`);
+    }
+    existsLaunch.upcoming = false;
+    existsLaunch.success = false;
+
+    return saveLaunch(existsLaunch);
+  } catch (error) {
+    console.error("failed to abort! ", error);
+    throw error;
+  }
 }
 
 module.exports = {
   getAllLaunches,
-  addLaunch,
+  scheduleLaunch,
   abortLaunch,
 };

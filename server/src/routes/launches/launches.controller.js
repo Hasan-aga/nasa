@@ -1,48 +1,55 @@
 const {
   getAllLaunches,
-  addLaunch,
+  scheduleLaunch,
   abortLaunch,
 } = require("../../model/launches.model");
 
-function httpGetAllLaunches(req, res) {
-  return res.status(200).json(getAllLaunches());
+async function httpGetAllLaunches(req, res) {
+  try {
+    return res.status(200).json(await getAllLaunches());
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
-function httpAddLaunch(req, res) {
+async function httpAddLaunch(req, res) {
   const launch = req.body;
 
-  // validation
-  if (
-    !launch.mission ||
-    !launch.launchDate ||
-    !launch.rocket ||
-    !launch.target
-  ) {
-    return res.status(400).json({
-      error: "Some required props are missing!",
+  try {
+    // validation
+    if (
+      !launch.mission ||
+      !launch.launchDate ||
+      !launch.rocket ||
+      !launch.target
+    ) {
+      throw new Error("Some required props are missing!");
+    }
+
+    launch.launchDate = new Date(launch.launchDate);
+
+    if (launch.launchDate.toString().toLowerCase() === "invalid date") {
+      throw new Error();
+    }
+
+    const result = await scheduleLaunch(launch);
+    return res.status(201).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: error.message,
     });
   }
-
-  launch.launchDate = new Date(launch.launchDate);
-
-  if (launch.launchDate.toString().toLowerCase() === "invalid date") {
-    return res.status(400).json({
-      error: "Invalid date!",
-    });
-  }
-
-  addLaunch(launch);
-  return res.status(201).json(launch);
 }
 
-function httpRemoveLaunch(req, res) {
+async function httpRemoveLaunch(req, res) {
   const removeID = Number(req.params.id);
-  abortLaunch(removeID)
-    ? res.status(200).json({ removed: removeID })
-    : res
-        .status(404)
-        .json({ error: "failed to remove! object does not exist" });
-  return;
+  try {
+    const launchAborted = await abortLaunch(removeID);
+    res.status(200).json(launchAborted);
+    return launchAborted;
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
 }
 
 module.exports = {

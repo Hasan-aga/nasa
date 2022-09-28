@@ -1,8 +1,7 @@
 const http = require("http");
 const { app } = require("./app");
-const { planetPromise } = require("./model/planet.model");
+const { loadPlanetsData } = require("./model/planet.model");
 const mongoose = require("mongoose");
-const path = require("path");
 require("dotenv").config();
 
 const PORT = process.env.PORT || 8000;
@@ -19,7 +18,7 @@ mongoose.connection.on("error", (error) => {
 async function startServerAfterLoadingData() {
   try {
     await mongoose.connect(process.env.MONGO_URL);
-    await planetPromise;
+    await loadPlanetsData();
     server.listen(PORT, () => console.log("Listening on port ", PORT));
   } catch (error) {
     console.error(error);
