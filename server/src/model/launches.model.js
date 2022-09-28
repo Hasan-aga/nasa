@@ -34,6 +34,7 @@ async function saveLaunch(launch) {
       `cannot add launch with invalid planet! "${launch.target}" is invalid`
     );
   }
+  //TODO: use a method that applies the schema
   await launches.findOneAndUpdate(
     { flightNumber: launch.flightNumber },
     launch,
@@ -47,7 +48,6 @@ async function saveLaunch(launch) {
 async function scheduleLaunch(launch) {
   const flightNumber = (await getLatestFlightNumber()) + 1;
   launch.flightNumber = flightNumber;
-  launch.customer = ["Hasan Aga", "NASA"];
   launch.upcoming = true;
   launch.success = true;
   try {
