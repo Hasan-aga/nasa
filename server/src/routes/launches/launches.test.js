@@ -1,10 +1,13 @@
 const supertest = require("supertest");
 const { app } = require("../../app");
-const mongoConnect = require("../../utils/mongo");
+const { mongoConnect, mongoDisonnect } = require("../../utils/mongo");
 
 describe("testing launches API", () => {
   beforeAll(async () => {
     await mongoConnect();
+  });
+  afterAll(async () => {
+    await mongoDisonnect();
   });
   describe("test GET /launches", function () {
     test("should return 200 when GET launches", async function () {
@@ -18,7 +21,7 @@ describe("testing launches API", () => {
   describe("test POST /launches", function () {
     const testData = {
       mission: "test",
-      target: "Kepler-1652 b",
+      target: "test",
       rocket: "test",
       launchDate: "1/1/2100",
     };
