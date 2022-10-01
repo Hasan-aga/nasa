@@ -9,14 +9,20 @@ async function findLaunch(filter) {
 async function getLatestFlightNumber() {
   const latestLaunch = await launches.findOne().sort("-flightNumber");
   if (!latestLaunch) {
-    return process.env.DEFAULT_FLIGHT_NUMBER;
+    return Number(process.env.DEFAULT_FLIGHT_NUMBER);
   }
   return latestLaunch.flightNumber;
 }
 
-async function getAllLaunches() {
+async function getAllLaunches(page, limit) {
   try {
-    const results = await launches.find({});
+    const results = page
+      ? await launches
+          .find({})
+          .sort({ flightNumber: 1 })
+          .skip((page - 1) * limit)
+          .limit(limit)
+      : await launches.find({}).sort({ flightNumber: 1 });
     return results;
   } catch (error) {
     console.error(`couldn't get launches from database, ${error}`);
@@ -114,7 +120,9 @@ async function populateSpacexLaunches() {
       data: data,
     };
     const response = await axios(config);
-
+    if (response.status !== 200) {
+      throw new Error(`failed to get spacex launches, ${response.status}`);
+    }
     const spacexLaunches = response.data.docs;
     for (const spacexLaunch of spacexLaunches) {
       const launch = {
@@ -128,7 +136,6 @@ async function populateSpacexLaunches() {
           (payload) => payload.customers
         ),
       };
-      console.log(`${launch.flightNumber} - ${launch.customers}`);
       saveLaunch(launch);
     }
     return spacexLaunches;

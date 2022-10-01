@@ -13,7 +13,7 @@ async function startServerAfterLoadingData() {
     await mongoConnect();
     await loadPlanetsData();
     await loadSpacexLaunches();
-    await server.listen(PORT, () => console.log("Listening on port ", PORT));
+    server.listen(PORT, () => console.log("Listening on port ", PORT));
   } catch (error) {
     console.error(error);
   }
