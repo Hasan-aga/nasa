@@ -1,5 +1,10 @@
 const launches = require("./launches.mongo");
 const planets = require("./planet.mongo");
+const axios = require("axios").default;
+
+async function findLaunch(filter) {
+  return await launches.findOne(filter);
+}
 
 async function getLatestFlightNumber() {
   const latestLaunch = await launches.findOne().sort("-flightNumber");
@@ -28,12 +33,6 @@ async function getLaunchById(id) {
 }
 
 async function saveLaunch(launch) {
-  const validPlanet = await planets.findOne({ kepler_name: launch.target });
-  if (!validPlanet) {
-    throw new Error(
-      `cannot add launch with invalid planet! "${launch.target}" is invalid`
-    );
-  }
   //TODO: use a method that applies the schema
   await launches.findOneAndUpdate(
     { flightNumber: launch.flightNumber },
@@ -46,6 +45,12 @@ async function saveLaunch(launch) {
 }
 
 async function scheduleLaunch(launch) {
+  const validPlanet = await planets.findOne({ kepler_name: launch.target });
+  if (!validPlanet) {
+    throw new Error(
+      `cannot add launch with invalid planet! "${launch.target}" is invalid`
+    );
+  }
   const flightNumber = (await getLatestFlightNumber()) + 1;
   launch.flightNumber = flightNumber;
   launch.upcoming = true;
@@ -77,8 +82,80 @@ async function abortLaunch(id) {
   }
 }
 
+async function populateSpacexLaunches() {
+  try {
+    var data = JSON.stringify({
+      query: {},
+      options: {
+        pagination: false,
+        populate: [
+          {
+            path: "rocket",
+            select: {
+              name: 1,
+            },
+          },
+          {
+            path: "payloads",
+            select: {
+              customers: 1,
+            },
+          },
+        ],
+      },
+    });
+
+    var config = {
+      method: "post",
+      url: process.env.SPACEX_QUERY_URL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+    const response = await axios(config);
+
+    const spacexLaunches = response.data.docs;
+    for (const spacexLaunch of spacexLaunches) {
+      const launch = {
+        flightNumber: spacexLaunch.flight_number,
+        mission: spacexLaunch.name,
+        rocket: spacexLaunch.rocket.name,
+        launchDate: spacexLaunch.date_local,
+        upcoming: spacexLaunch.upcoming,
+        success: spacexLaunch.success,
+        customers: spacexLaunch.payloads.flatMap(
+          (payload) => payload.customers
+        ),
+      };
+      console.log(`${launch.flightNumber} - ${launch.customers}`);
+      saveLaunch(launch);
+    }
+    return spacexLaunches;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function loadSpacexLaunches() {
+  const spacexLaunch = await findLaunch({
+    flightNumber: 1,
+    mission: "FalconSat",
+    rocket: "Falcon 1",
+  });
+
+  if (spacexLaunch) {
+    console.log(`spacex launches already loaded.`);
+  } else {
+    console.log(`loading spacex launches...`);
+    const spacexLaunches = await populateSpacexLaunches();
+    console.log(`we got ${spacexLaunches.length} launches from SpaceX`);
+  }
+}
+
 module.exports = {
   getAllLaunches,
   scheduleLaunch,
   abortLaunch,
+  loadSpacexLaunches,
 };

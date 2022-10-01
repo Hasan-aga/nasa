@@ -2,6 +2,7 @@ const {
   getAllLaunches,
   scheduleLaunch,
   abortLaunch,
+  getSpacexLaunches,
 } = require("../../model/launches.model");
 
 async function httpGetAllLaunches(req, res) {
