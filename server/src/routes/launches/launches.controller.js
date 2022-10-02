@@ -5,8 +5,9 @@ const {
 } = require("../../model/launches.model");
 
 async function httpGetAllLaunches(req, res) {
+  const { page, limit } = req.query;
   try {
-    return res.status(200).json(await getAllLaunches());
+    return res.status(200).json(await getAllLaunches(page, limit));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

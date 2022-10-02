@@ -12,7 +12,7 @@ describe("test /planets API", function () {
 
   test("should return 200 when GET planets", async function () {
     await supertest(app)
-      .get("/planets")
+      .get("/v1/planets")
       .expect("Content-Type", /json/)
       .expect(200);
   });

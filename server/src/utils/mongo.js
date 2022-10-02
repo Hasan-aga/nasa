@@ -14,7 +14,6 @@ async function mongoConnect() {
     process.env.NODE_ENV === "test"
       ? process.env.MONGO_TEST_URL
       : process.env.MONGO_URL;
-  console.log(MONGO_URL);
   await mongoose.connect(MONGO_URL);
 }
 async function mongoDisonnect() {

@@ -12,7 +12,7 @@ describe("testing launches API", () => {
   describe("test GET /launches", function () {
     test("should return 200 when GET launches", async function () {
       await supertest(app)
-        .get("/launches")
+        .get("/v1/launches")
         .expect("Content-Type", /json/)
         .expect(200);
     });
@@ -31,18 +31,18 @@ describe("testing launches API", () => {
 
     test("should return 201 when adding new launch", async function () {
       await supertest(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(testData)
         .expect("Content-Type", /json/)
         .expect(201);
     });
 
     test("it should catch missing props", async function () {
-      await supertest(app).post("/launches").send(missingProp).expect(400);
+      await supertest(app).post("/v1/launches").send(missingProp).expect(400);
     });
     test("it should catch invalid date", async function () {
       await supertest(app)
-        .post("/launches")
+        .post("/v1/launches")
         .send(invalidDateObject)
         .expect(400);
     });
