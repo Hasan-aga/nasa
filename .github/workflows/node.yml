@@ -12,10 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: use NodeJS version ${{matrix.node-version}}
         uses: actions/setup-node@v2
         with:
           node-version: ${{matrix.node-version}}
       - run: npm install
       - run: npm run build --prefix client
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-replica-set: test-rs
       - run: npm test
