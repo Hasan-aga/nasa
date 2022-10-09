@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
-        mongo-version: [4.x]
+        mongo-version: [4.4]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,6 +24,8 @@ jobs:
         uses: supercharge/mongodb-github-action@1.8.0
         with:
           mongodb-version: ${{matrix.mongo-version}}
+          mongodb-username: hasan
+          mongodb-password: secret
 
       - run: npm install
       - run: npm run build --prefix client
