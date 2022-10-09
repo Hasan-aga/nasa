@@ -6,11 +6,11 @@ jobs:
   build:
     env:
       CI: true
-      MONGO_TEST_URL: mongodb://127.0.0.1:27017/nasa
+      MONGO_TEST_URL: mongodb://mongo:27017/nasa
     strategy:
       matrix:
         node-version: [15.x, 16.x]
-        mongo-version: ["4.9"]
+        # mongo-version: ["4.9"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,6 +24,5 @@ jobs:
 
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.8.0
-        with:
-          mongodb-version: ${{matrix.mongo-version}}
+
       - run: npm test
