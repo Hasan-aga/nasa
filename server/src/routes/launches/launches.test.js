@@ -32,11 +32,15 @@ describe("testing launches API", () => {
     const invalidDateObject = { ...testData, ["launchDate"]: "" };
 
     test("should return 201 when adding new launch", async function () {
-      await supertest(app)
-        .post("/v1/launches")
-        .send(testData)
-        .expect("Content-Type", /json/)
-        .expect(201);
+      try {
+        await supertest(app)
+          .post("/v1/launches")
+          .send(testData)
+          .expect("Content-Type", /json/)
+          .expect(201);
+      } catch (error) {
+        console.log(error);
+      }
     });
 
     test("it should catch missing props", async function () {
