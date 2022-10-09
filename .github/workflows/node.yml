@@ -7,6 +7,7 @@ jobs:
     env:
       CI: true
       MONGO_TEST_URL: mongodb://localhost:27017
+      DEFAULT_FLIGHT_NUMBER: 100
     strategy:
       matrix:
         node-version: [16.x]
