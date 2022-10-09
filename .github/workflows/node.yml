@@ -6,7 +6,7 @@ jobs:
   build:
     env:
       CI: true
-      MONGO_TEST_URL: mongodb://localhost/nasa
+      MONGO_TEST_URL: mongodb://127.0.0.1:27017/nasa
     strategy:
       matrix:
         node-version: [15.x, 16.x]
