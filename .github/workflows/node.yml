@@ -6,11 +6,11 @@ jobs:
   build:
     env:
       CI: true
-      MONGO_TEST_URL: mongodb://127.0.0.1:27017/nasa
+      MONGO_TEST_URL: mongodb://localhost/nasa
     strategy:
       matrix:
         node-version: [15.x, 16.x]
-        mongo-version: ["4.9"]
+        mongo-version: ["4.4"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
