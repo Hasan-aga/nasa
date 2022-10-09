@@ -23,7 +23,7 @@ describe("testing launches API", () => {
   describe("test POST /launches", function () {
     const testData = {
       mission: "test",
-      target: "test",
+      target: "Kepler-296 A f",
       rocket: "test",
       launchDate: "1/1/2100",
     };
@@ -32,15 +32,11 @@ describe("testing launches API", () => {
     const invalidDateObject = { ...testData, ["launchDate"]: "" };
 
     test("should return 201 when adding new launch", async function () {
-      try {
-        await supertest(app)
-          .post("/v1/launches")
-          .send(testData)
-          .expect("Content-Type", /json/)
-          .expect(201);
-      } catch (error) {
-        console.log(error);
-      }
+      await supertest(app)
+        .post("/v1/launches")
+        .send(testData)
+        .expect("Content-Type", /json/)
+        .expect(201);
     });
 
     test("it should catch missing props", async function () {
