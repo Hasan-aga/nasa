@@ -6,7 +6,7 @@ jobs:
   build:
     env:
       CI: true
-      MONGO_TEST_URL: mongodb://hasan:secret@localhost:30500
+      MONGO_TEST_URL: mongodb://ocalhost:27017
     strategy:
       matrix:
         node-version: [16.x]
@@ -24,9 +24,6 @@ jobs:
         uses: supercharge/mongodb-github-action@1.8.0
         with:
           mongodb-version: ${{matrix.mongo-version}}
-          mongodb-username: hasan
-          mongodb-password: secret
-          mongodb-port: 27000
 
       - run: npm install
       - run: npm run build --prefix client
