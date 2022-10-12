@@ -8,7 +8,6 @@ An exercise project on NodeJS and the CI. The project consists of a React fronte
 ## How To Run
 
 You will need to provide the following environemnt variables:
-
     1. MONGO_URL which is the connection string of the MongoDB database.
 
 On the root directory run `npm run build` to build the frontend. Then run `npm start --prefix server` to start the backend. A server will start listening on port 8000 so you can access the homepage on `localhost:8000`.
