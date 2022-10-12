@@ -1,9 +1,9 @@
-name: Build
+name: Tests
 on:
   push:
     branches: [master]
 jobs:
-  build:
+  test:
     env:
       CI: true
       MONGO_TEST_URL: mongodb://localhost:27017
@@ -27,4 +27,4 @@ jobs:
           mongodb-version: ${{matrix.mongo-version}}
 
       - run: npm install
-      - run: npm run build --prefix client
+      - run: npm test
