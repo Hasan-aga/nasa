@@ -1,6 +1,6 @@
 # nasa
 
-An exercise project on NodeJS and the CI.
+An exercise project on NodeJS and the CI. The project consists of a React frontend and a Node/express backend. The backend will serve both the frontend and some of the APIs that the fronend uses. The data is persisted using MongoDB.
 
 ![build workflow](https://github.com/hasan-aga/nasa/actions/workflows/node.yml/badge.svg)
 ![tests workflow](https://github.com/hasan-aga/nasa/actions/workflows/tests.yml/badge.svg)
