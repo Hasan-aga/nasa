@@ -11,7 +11,8 @@
     "server": " npm run watch --prefix server",
     "client": " npm start --prefix client",
     "watch": "npm run server & npm run client",
-    "test": "npm run test --prefix server"
+    "test": "npm run test --prefix server",
+    "mockDB": "docker run --name mongoTestDB -p 27017:27017  -d mongo:4.4 "
   },
   "keywords": [],
   "author": "",
