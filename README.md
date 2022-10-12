@@ -13,11 +13,8 @@ You will need to provide the following environemnt variables:
 
 On the root directory run `npm run build` to build the frontend. Then run `npm start --prefix server` to start the backend. A server will start listening on port 8000 so you can access the homepage on `localhost:8000`.
 
-## Running from Docker image
 
-I have created a docker image called hasanaga/nasa-project which you can use to quickly launch this app by running `docker run --restart=always -p 80:8000 hasanaga/nasa-project` which creates a webserver at port 80 accessible at `localhost` (the default port is 80 so you don't have to type it)
-
-## How to create your own docker image of the project
+## How to create a docker image of the project
 
 Install docker on your machine and run `docker build . -t <name>` which will build a docker image. To run the image use`docker run -p 80:8000 <name>`.
 
