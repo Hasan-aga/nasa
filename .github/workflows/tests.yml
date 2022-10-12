@@ -1,4 +1,4 @@
-name: Front-end build
+name: Tests
 on:
   push:
     branches: [master]
@@ -27,5 +27,4 @@ jobs:
           mongodb-version: ${{matrix.mongo-version}}
 
       - run: npm install
-      - run: npm run build --prefix client      - run: npm run build --prefix client
-
+      - run: npm test
