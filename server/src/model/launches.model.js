@@ -9,7 +9,7 @@ async function findLaunch(filter) {
 async function getLatestFlightNumber() {
   const latestLaunch = await launches.findOne().sort("-flightNumber");
   if (!latestLaunch) {
-    return Number(process.env.DEFAULT_FLIGHT_NUMBER);
+    return Number(100);
   }
   return latestLaunch.flightNumber;
 }
@@ -113,7 +113,7 @@ async function populateSpacexLaunches() {
 
     var config = {
       method: "post",
-      url: process.env.SPACEX_QUERY_URL,
+      url: "https://api.spacexdata.com/v5/launches/query",
       headers: {
         "Content-Type": "application/json",
       },
